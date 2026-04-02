@@ -10,21 +10,10 @@
     export let url: string;
 </script>
 
-<div class="four04">
+<div class="flex items-center flex-col text-center gap-4 p-8">
     <h1>404 - Page Not Found</h1>
     <p>
         The page <code>{url}</code> could not be found. Please check the URL or
         go back to the <a href="/">homepage</a>.
     </p>
 </div>
-
-<style>
-    .four04 {
-        display: flex;
-        align-items: center;
-        flex-direction: column;
-        text-align: center;
-        gap: 1rem;
-        padding: 2rem 1rem;
-    }
-</style>
