@@ -19,6 +19,7 @@
       "name": "site",
       "version": "0.0.0",
       "dependencies": {
+        "@arborium/arborium": "^2.16.0",
         "@roxi/routify": "^3.0.0-next.293",
       },
       "devDependencies": {
@@ -46,6 +47,8 @@
     },
   },
   "packages": {
+    "@arborium/arborium": ["@arborium/arborium@2.16.0", "", {}, "sha512-9rz2J9Hx+nMq1qon65SbmE+XZvwr/oDqYPinj+BnYOzef7lGwzn1GtYhuB1Cz8jTZ84wIaBt+B8nTQEGYniqNg=="],
+
     "@borewit/text-codec": ["@borewit/text-codec@0.2.2", "", {}, "sha512-DDaRehssg1aNrH4+2hnj1B7vnUGEjU6OIlyRdkMd0aUdIUvKXrJfXsy8LVtXAy7DRvYVluWbMspsRhz2lcW0mQ=="],
 
     "@emnapi/core": ["@emnapi/core@1.9.0", "", { "dependencies": { "@emnapi/wasi-threads": "1.2.0", "tslib": "^2.4.0" } }, "sha512-0DQ98G9ZQZOxfUcQn1waV2yS8aWdZ6kJMbYCJB3oUBecjWYO1fqJ+a1DRfPF3O5JEkwqwP1A9QEN/9mYm2Yd0w=="],
