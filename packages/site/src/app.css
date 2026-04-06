@@ -126,4 +126,14 @@
 	html {
 		@apply font-mono;
 	}
+
+	/* Isolate Arborium syntax highlighting from Tailwind cascade */
+	.arborium-highlight-wrap pre {
+		/* Prevent Tailwind's text-foreground from overriding theme colors */
+		color: revert !important;
+	}
+	.arborium-highlight-wrap pre * {
+		/* Allow Arborium's theme to style semantic tags */
+		color: revert;
+	}
 }

@@ -126,14 +126,15 @@
                 {/each}
             </div>
         </div>
-        <div class="relative min-h-0 flex-1">
+        <div class="relative min-h-0 flex-1 arborium-highlight-wrap">
             <pre
                 aria-hidden="true"
                 bind:this={highlightRef}
-                class="bg-transparent pointer-events-none absolute inset-0 overflow-auto border border-input/40 px-2.5 py-2 text-xs leading-5 whitespace-pre"
-                style={`height: ${textareaHeight}; min-height: ${textareaHeight};`}><code
+                class="pointer-events-none absolute inset-0 overflow-auto border border-input/40 px-2.5 py-2 text-xs leading-5 whitespace-pre"
+                style={`height: ${textareaHeight}; min-height: ${textareaHeight}; background-color: #0d1117; color: #c9d1d9;`}><code
                     >{@html highlightedHtml}</code
-                ></pre>
+                >
+            </pre>
 
             <Textarea
                 bind:ref={textareaRef}
