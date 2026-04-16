@@ -1,7 +1,8 @@
 <script lang="ts">
     import { onMount } from "svelte";
-    import { highlight, availableLanguages } from "@arborium/arborium";
-    import "@arborium/arborium/themes/github-dark.css";
+    import { highlight, availableLanguages, detectLanguage } from "@arborium/arborium";
+    import "@arborium/arborium/themes/base.css";
+    import "@arborium/arborium/themes/rustdoc-dark.css";
     import { Textarea } from "$lib/components/ui/textarea/index.js";
 
     import Languages from "./languages.svelte";
@@ -24,6 +25,20 @@
 
     let metaRef: HTMLParagraphElement | null = null;
     let metaHeight = 0;
+
+    function onEditorBeforeInput(e: InputEvent) {
+        if (e.inputType === "insertFromPaste"){
+            if (value.length === 0) {
+                // if the editor is empty, try to detect the language of the pasted content
+                const pastedText = (e.data || "").trim();
+                const detectedLanguage = detectLanguage(pastedText);
+                if (detectedLanguage) {
+                    console.log(`sucessfully detected language: ${detectedLanguage}`);
+                    language = detectedLanguage;
+                }
+            }
+        }
+    }
 
     const textareaHeight = $derived(
         `calc(100dvh - var(--shell-nav-h, 0px) - ${metaHeight}px - 2.5rem)`,
@@ -131,7 +146,7 @@
                 aria-hidden="true"
                 bind:this={highlightRef}
                 class="pointer-events-none absolute inset-0 overflow-auto border border-input/40 px-2.5 py-2 text-xs leading-5 whitespace-pre"
-                style={`height: ${textareaHeight}; min-height: ${textareaHeight}; background-color: #0d1117; color: #c9d1d9;`}><code
+                style={`height: ${textareaHeight}; min-height: ${textareaHeight}; color: #c9d1d9;`}><code
                     >{@html highlightedHtml}</code
                 >
             </pre>
