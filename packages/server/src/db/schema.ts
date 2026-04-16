@@ -5,6 +5,7 @@ import type z from "zod";
 export const users = pgTable("users", {
     id: uuid("id").primaryKey().defaultRandom(),
     email: varchar({ length: 100 }).notNull().unique(),
+    password: varchar({ length: 60 }).notNull(),
 });
 
 export const User = createSelectSchema(users);
@@ -12,6 +13,7 @@ export type User = z.infer<typeof User>;
 
 export const pastes = pgTable("pastes", {
     id: uuid("id").primaryKey().defaultRandom(),
+    short_id: varchar().unique().notNull(),
     owner: uuid("owner")
         .references(() => users.id)
         .notNull(),
