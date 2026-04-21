@@ -2,6 +2,8 @@ import z from "zod";
 
 export const env = z
     .object({
+        /** CORS origin for client. */
+        CORS_ORIGIN: z.url(),
         /** Postgres connection string. */
         DATABASE_URL: z.url(),
         /** JWT access token secrets. */
