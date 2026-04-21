@@ -18,12 +18,39 @@
         registerEmail = $state(""),
         registerPassword = $state("");
 
+    let loginEmailRef = $state<HTMLInputElement | null>(null);
+    let loginPasswordRef = $state<HTMLInputElement | null>(null);
+    let registerEmailRef = $state<HTMLInputElement | null>(null);
+    let registerPasswordRef = $state<HTMLInputElement | null>(null);
+
+    function handleMyPastesClick() {
+        window.location.href = "/me";
+    }
+
+    function handleTabToNextField(
+        event: KeyboardEvent,
+        nextField: HTMLInputElement | null,
+    ) {
+        if (event.key !== "Tab" || event.shiftKey) return;
+        event.preventDefault();
+        nextField?.focus();
+    }
+
+    function handleShiftTabToPreviousField(
+        event: KeyboardEvent,
+        previousField: HTMLInputElement | null,
+    ) {
+        if (event.key !== "Tab" || !event.shiftKey) return;
+        event.preventDefault();
+        previousField?.focus();
+    }
+
     onMount(() => {
         const token = localStorage.getItem("authorization");
         if (token) {
             api.user
                 .get({ headers: { authorization: token } })
-                .then(response => {
+                .then((response: any) => {
                     if (response.data) {
                         session.user = response.data;
                     } else {
@@ -93,7 +120,10 @@
 
 <Toaster richColors />
 <ModeWatcher />
-<div aria-hidden="true" class="pointer-events-none fixed inset-0 -z-10 bg-background"></div>
+<div
+    aria-hidden="true"
+    class="pointer-events-none fixed inset-0 -z-10 bg-background"
+></div>
 <div class="flex min-h-dvh flex-col">
     <div class="flex shrink-0 flex-row" bind:this={navBarRef}>
         <div class="top-0 left-0 w-full">
@@ -115,10 +145,22 @@
                         <NavigationMenu.Item>
                             <NavigationMenu.Link>
                                 <DropdownMenu.Root>
-                                    <DropdownMenu.Trigger class="text-sm">logout</DropdownMenu.Trigger>
+                                    <DropdownMenu.Trigger class="text-sm"
+                                        >{session.user.email}</DropdownMenu.Trigger
+                                    >
                                     <DropdownMenu.Content class="w-50 min-w-45">
-                                        <DropdownMenu.Group class="flex w-full justify-end">
-                                            <Button onclick={handleLogout} variant="outline">logout</Button>
+                                        <DropdownMenu.Group
+                                            class="flex w-full justify-end"
+                                        >
+                                            <Button
+                                                onclick={handleLogout}
+                                                variant="outline">logout</Button
+                                            >
+                                            <Button
+                                                onclick={handleMyPastesClick}
+                                                variant="outline"
+                                                >my pastes</Button
+                                            >
                                         </DropdownMenu.Group>
                                     </DropdownMenu.Content>
                                 </DropdownMenu.Root>
@@ -128,23 +170,42 @@
                         <NavigationMenu.Item>
                             <NavigationMenu.Link>
                                 <DropdownMenu.Root>
-                                    <DropdownMenu.Trigger class="text-sm">login</DropdownMenu.Trigger>
+                                    <DropdownMenu.Trigger class="text-sm"
+                                        >login</DropdownMenu.Trigger
+                                    >
                                     <DropdownMenu.Content class="w-50 min-w-45">
                                         <DropdownMenu.Group>
-                                            <DropdownMenu.Sub>
-                                                <Input bind:value={loginEmail} placeholder="email" class="w-full" />
-                                            </DropdownMenu.Sub>
-                                            <DropdownMenu.Sub>
-                                                <Input
-                                                    bind:value={loginPassword}
-                                                    placeholder="password"
-                                                    type="password"
-                                                    class="w-full"
-                                                />
-                                            </DropdownMenu.Sub>
+                                            <Input
+                                                bind:ref={loginEmailRef}
+                                                bind:value={loginEmail}
+                                                placeholder="email"
+                                                class="w-full"
+                                                onkeydown={(event) =>
+                                                    handleTabToNextField(
+                                                        event,
+                                                        loginPasswordRef,
+                                                    )}
+                                            />
+                                            <Input
+                                                bind:ref={loginPasswordRef}
+                                                bind:value={loginPassword}
+                                                placeholder="password"
+                                                type="password"
+                                                class="w-full"
+                                                onkeydown={(event) =>
+                                                    handleShiftTabToPreviousField(
+                                                        event,
+                                                        loginEmailRef,
+                                                    )}
+                                            />
                                         </DropdownMenu.Group>
-                                        <DropdownMenu.Group class="flex w-full justify-end">
-                                            <Button onclick={handleLogin} variant="outline">login</Button>
+                                        <DropdownMenu.Group
+                                            class="flex w-full justify-end"
+                                        >
+                                            <Button
+                                                onclick={handleLogin}
+                                                variant="outline">login</Button
+                                            >
                                         </DropdownMenu.Group>
                                     </DropdownMenu.Content>
                                 </DropdownMenu.Root>
@@ -153,23 +214,43 @@
                         <NavigationMenu.Item>
                             <NavigationMenu.Link>
                                 <DropdownMenu.Root>
-                                    <DropdownMenu.Trigger class="text-sm">register</DropdownMenu.Trigger>
+                                    <DropdownMenu.Trigger class="text-sm"
+                                        >register</DropdownMenu.Trigger
+                                    >
                                     <DropdownMenu.Content class="w-50 min-w-45">
                                         <DropdownMenu.Group>
-                                            <DropdownMenu.Sub>
-                                                <Input bind:value={registerEmail} placeholder="email" class="w-full" />
-                                            </DropdownMenu.Sub>
-                                            <DropdownMenu.Sub>
-                                                <Input
-                                                    bind:value={registerPassword}
-                                                    placeholder="password"
-                                                    type="password"
-                                                    class="w-full"
-                                                />
-                                            </DropdownMenu.Sub>
+                                            <Input
+                                                bind:ref={registerEmailRef}
+                                                bind:value={registerEmail}
+                                                placeholder="email"
+                                                class="w-full"
+                                                onkeydown={(event) =>
+                                                    handleTabToNextField(
+                                                        event,
+                                                        registerPasswordRef,
+                                                    )}
+                                            />
+                                            <Input
+                                                bind:ref={registerPasswordRef}
+                                                bind:value={registerPassword}
+                                                placeholder="password"
+                                                type="password"
+                                                class="w-full"
+                                                onkeydown={(event) =>
+                                                    handleShiftTabToPreviousField(
+                                                        event,
+                                                        registerEmailRef,
+                                                    )}
+                                            />
                                         </DropdownMenu.Group>
-                                        <DropdownMenu.Group class="flex w-full justify-end">
-                                            <Button onclick={handleRegister} variant="outline">register</Button>
+                                        <DropdownMenu.Group
+                                            class="flex w-full justify-end"
+                                        >
+                                            <Button
+                                                onclick={handleRegister}
+                                                variant="outline"
+                                                >register</Button
+                                            >
                                         </DropdownMenu.Group>
                                     </DropdownMenu.Content>
                                 </DropdownMenu.Root>

@@ -1,4 +1,4 @@
-import { pgTable, text, uuid, varchar } from "drizzle-orm/pg-core";
+import { pgTable, text, uuid, varchar, timestamp } from "drizzle-orm/pg-core";
 import { createSelectSchema } from "drizzle-zod";
 import type z from "zod";
 
@@ -19,6 +19,7 @@ export const pastes = pgTable("pastes", {
         .notNull(),
     language: varchar({ length: 50 }),
     text: text("text").notNull(),
+    created_at: timestamp("created_at").notNull().defaultNow(),
 });
 
 export const Paste = createSelectSchema(pastes);

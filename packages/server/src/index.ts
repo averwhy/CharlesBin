@@ -76,30 +76,37 @@ const app = new Elysia()
     })
     .derive(async ({ headers, status }) => {
         const token = headers.authorization;
-
         if (!token || typeof token !== "string")
             return status(401, {
                 error: "Unauthorized",
             });
 
         const verifiedToken = verifyToken(token);
-
         if (!verifiedToken)
             return status(401, {
                 error: "Unauthorized",
             });
 
         const user = (await db.select().from(users).where(eq(users.id, verifiedToken.sub)).limit(1))[0];
-
         if (!user)
             return status(404, {
                 error: "User not found",
             });
-
         return { user: { id: user.id, email: user.email } };
     })
     .get("/user", async ({ user }) => {
         return { id: user.id, email: user.email };
+    })
+    .get("/pastes", async ({ user }) => {
+        const result = await db
+            .select({
+                short_id: pastes.short_id,
+                language: pastes.language,
+                created_at: pastes.created_at,
+            })
+            .from(pastes)
+            .where(eq(pastes.owner, user.id));
+        return { pastes: result };
     })
     .post(
         "/pastes",

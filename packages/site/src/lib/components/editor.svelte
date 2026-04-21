@@ -1,6 +1,10 @@
 <script lang="ts">
     import { Textarea } from "$lib/components/ui/textarea/index.js";
-    import { availableLanguages, detectLanguage, highlight } from "@arborium/arborium";
+    import {
+        availableLanguages,
+        detectLanguage,
+        highlight,
+    } from "@arborium/arborium";
     import "@arborium/arborium/themes/base.css";
     import "@arborium/arborium/themes/rustdoc-dark.css";
     import { onMount } from "svelte";
@@ -14,7 +18,11 @@
         readonly?: boolean;
     }
 
-    let { language = $bindable("typescript"), value = $bindable(""), readonly = false }: Props = $props();
+    let {
+        language = $bindable("typescript"),
+        value = $bindable(""),
+        readonly = false,
+    }: Props = $props();
 
     let editingLanguage = $state(false);
     let highlightedHtml = $state(" ");
@@ -34,21 +42,28 @@
                 const pastedText = (e.data || "").trim();
                 const detectedLanguage = detectLanguage(pastedText);
                 if (detectedLanguage) {
-                    console.log(`sucessfully detected language: ${detectedLanguage}`);
+                    console.log(
+                        `sucessfully detected language: ${detectedLanguage}`,
+                    );
                     language = detectedLanguage;
                 }
             }
         }
     }
 
-    const textareaHeight = $derived(`calc(100dvh - var(--shell-nav-h, 0px) - ${metaHeight}px - 2.5rem)`);
+    const textareaHeight = $derived(
+        `calc(100dvh - var(--shell-nav-h, 0px) - ${metaHeight}px - 2.5rem)`,
+    );
 
     function toggleEditingLanguage() {
         editingLanguage = !editingLanguage;
     }
 
     function escapeHtml(source: string) {
-        return source.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;");
+        return source
+            .replaceAll("&", "&amp;")
+            .replaceAll("<", "&lt;")
+            .replaceAll(">", "&gt;");
     }
 
     async function updateHighlight(source: string, lang: string) {
@@ -79,8 +94,13 @@
     }
 
     $effect(() => {
-        if (!availableLanguages.includes(language) && language !== "plaintext") {
-            console.warn(`language "${language}" is not supported, falling back to plaintext.`);
+        if (
+            !availableLanguages.includes(language) &&
+            language !== "plaintext"
+        ) {
+            console.warn(
+                `language "${language}" is not supported, falling back to plaintext.`,
+            );
             language = "plaintext";
         }
         const languageChoice = language;
@@ -131,7 +151,9 @@
                 }}
             />
         {:else}
-            <button class="hover:underline" onclick={toggleEditingLanguage}>{language}</button>
+            <button class="hover:underline" onclick={toggleEditingLanguage}
+                >{language}</button
+            >
         {/if} | {value.length} chars | {value.split("\n").length} lines
         {#if !readonly}
             |
@@ -139,7 +161,9 @@
         {/if}
     </p>
     <div class="flex flex-row gap-1">
-        <div class="w-9 overflow-hidden pt-2 text-right text-xs text-muted-foreground select-none leading-5">
+        <div
+            class="w-9 overflow-hidden pt-2 text-right text-xs text-muted-foreground select-none leading-5"
+        >
             <div style={`transform: translateY(-${editorScrollTop}px);`}>
                 {#each value.split("\n") as _line, i}
                     <div>{i + 1}</div>
@@ -161,6 +185,7 @@
                 disabled={readonly}
                 class="relative min-h-0 resize-none border-input/40 bg-transparent text-transparent caret-foreground selection:bg-foreground/20 focus-visible:border-input/55 focus-visible:ring-input/55 aria-invalid:ring-input/55 dark:aria-invalid:ring-input/55 leading-5"
                 style={`height: ${textareaHeight}; min-height: ${textareaHeight};`}
+                onbeforeinput={onEditorBeforeInput}
                 onscroll={syncEditorScroll}
                 bind:value
                 spellcheck={false}
