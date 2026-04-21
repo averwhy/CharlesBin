@@ -49,6 +49,38 @@ export const routes = {
       },
       "asyncModule": () => import('../src/routes/index.svelte'),
       "children": []
+    },
+    {
+      "meta": {},
+      "id": "_default_p",
+      "name": "p",
+      "module": false,
+      "file": {
+        "path": "src/routes/p",
+        "dir": "src/routes",
+        "base": "p",
+        "ext": "",
+        "name": "p"
+      },
+      "children": [
+        {
+          "meta": {
+            "dynamic": true,
+            "order": false
+          },
+          "id": "_default_p__paste__svelte",
+          "name": "[paste]",
+          "file": {
+            "path": "src/routes/p/[paste].svelte",
+            "dir": "src/routes/p",
+            "base": "[paste].svelte",
+            "ext": ".svelte",
+            "name": "[paste]"
+          },
+          "asyncModule": () => import('../src/routes/p/[paste].svelte'),
+          "children": []
+        }
+      ]
     }
   ]
 }
